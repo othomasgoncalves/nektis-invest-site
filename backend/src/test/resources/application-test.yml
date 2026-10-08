@@ -1,0 +1,28 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+nektis:
+  url-frontend: http://localhost:3000
+  url-publica: http://localhost:8080
+  limite-taxa:
+    capacidade: 100000
+    capacidade-leitura: 100000
+    janela: PT1M
+    confiar-proxy: false
+  pagamentos:
+    gateway: falso
+  email:
+    provedor: log
+    remetente: Nektis Invest <invest@nektis.tech>
+  links-acesso:
+    noticias: https://chat.whatsapp.com/test-noticias
+    networking: https://chat.whatsapp.com/test-networking
+
+logging:
+  level:
+    org.testcontainers: WARN
+    com.thomas.nektisinvest: INFO
