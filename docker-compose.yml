@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nektis-invest-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nektis_invest}
+      POSTGRES_USER: ${POSTGRES_USER:-nektis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nektis}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nektis} -d ${POSTGRES_DB:-nektis_invest}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+    container_name: nektis-invest-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-nektis_invest}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-nektis}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-nektis}
+      URL_FRONTEND: ${URL_FRONTEND:-http://localhost:3000}
+      URL_PUBLICA_API: ${URL_PUBLICA_API:-http://localhost:8080}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_REMETENTE: ${EMAIL_REMETENTE:-Nektis Invest <invest@nektis.tech>}
+      WHATSAPP_NOTICIAS_URL: ${WHATSAPP_NOTICIAS_URL:-}
+      WHATSAPP_NETWORKING_URL: ${WHATSAPP_NETWORKING_URL:-}
+    ports:
+      - "${PORTA_BACKEND:-8080}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080/api/v1}
+        NEXT_PUBLIC_VIDEO_URL: ${NEXT_PUBLIC_VIDEO_URL:-}
+    container_name: nektis-invest-web
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080/api/v1}
+    ports:
+      - "${PORTA_FRONTEND:-3000}:3000"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  postgres-data:
