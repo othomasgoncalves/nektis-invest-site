@@ -21,3 +21,4 @@ Thumbs.db
 *.iml
 .vscode/*
 !.vscode/extensions.json
+.claude/settings.local.json
