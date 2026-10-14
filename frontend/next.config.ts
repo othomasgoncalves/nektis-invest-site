@@ -23,6 +23,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   devIndicators: false,
+  // Libera o acesso ao servidor de dev via IP da rede local (teste em celular).
+  // Produção não usa isto: não há servidor de dev nem essa checagem de origem.
+  allowedDevOrigins: ["10.1.1.30"],
   async headers() {
     return [{ source: "/:path*", headers: HEADERS_SEGURANCA }];
   },

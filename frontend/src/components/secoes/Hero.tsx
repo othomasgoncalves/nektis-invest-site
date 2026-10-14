@@ -117,7 +117,6 @@ export function Hero() {
               src={joaoPedro}
               alt="João Pedro, responsável pelo conteúdo da Nektis Invest"
               priority
-              placeholder="blur"
               sizes="(max-width: 900px) 70vw, 580px"
               className="nk-hero-photo"
             />
