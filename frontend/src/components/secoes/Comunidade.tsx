@@ -195,11 +195,10 @@ export function Comunidade() {
             </p>
 
             <div className="mt-8 flex flex-col gap-4">
-              {CONVERSA.map((bolha, indice) => (
+              {CONVERSA.map((bolha) => (
                 <div
                   key={bolha.iniciais}
                   className="flex items-start gap-3"
-                  style={{ marginLeft: indice * 14 }}
                 >
                   <span
                     aria-hidden="true"
