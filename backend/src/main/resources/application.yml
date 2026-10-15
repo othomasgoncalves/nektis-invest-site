@@ -5,6 +5,18 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/nektis_invest}
     username: ${SPRING_DATASOURCE_USERNAME:nektis}
     password: ${SPRING_DATASOURCE_PASSWORD:nektis}
+    hikari:
+      # Dimensionado para a Neon, que suspende o compute quando fica ocioso e
+      # derruba as conexões abertas.
+      #   minimum-idle: 0  -> o pool esvazia junto, em vez de segurar conexões mortas
+      #   max-lifetime    -> abaixo do tempo de suspensão, para reciclar antes dele
+      #   connection-timeout -> folga para o cold start do compute (~1-3 s)
+      maximum-pool-size: ${DB_POOL_MAX:5}
+      minimum-idle: 0
+      idle-timeout: 60000
+      max-lifetime: 280000
+      connection-timeout: 30000
+      validation-timeout: 5000
   jpa:
     hibernate:
       ddl-auto: validate
@@ -21,7 +33,8 @@ spring:
       enabled: true
 
 server:
-  port: 8080
+  # A Square Cloud injeta PORT (80). Local continua 8080.
+  port: ${PORT:8080}
   shutdown: graceful
 
 management:
@@ -39,6 +52,9 @@ logging:
     com.thomas.nektisinvest: INFO
 
 nektis:
+  # Origens liberadas no frame-src do CSP, para o iframe do vídeo de
+  # apresentação. Ajuste se o vídeo sair do YouTube/Vimeo.
+  csp-frame-src: ${CSP_FRAME_SRC:https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com}
   url-frontend: ${URL_FRONTEND:http://localhost:3000}
   url-publica: ${URL_PUBLICA_API:http://localhost:8080}
   limite-taxa:

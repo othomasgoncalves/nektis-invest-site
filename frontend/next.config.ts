@@ -1,34 +1,24 @@
 import type { NextConfig } from "next";
 
-const HEADERS_SEGURANCA = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "DENY" },
-  { key: "Referrer-Policy", value: "no-referrer" },
-  {
-    key: "Strict-Transport-Security",
-    value: "max-age=63072000; includeSubDomains; preload",
-  },
-  {
-    key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), payment=()",
-  },
-  {
-    key: "Content-Security-Policy",
-    value: "frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
-  },
-];
-
+// Produção: `output: "export"` gera HTML/CSS/JS estáticos em `out/`, que o build
+// copia para dentro do jar do Spring Boot (ver .github/workflows/squarecloud.yml).
+// Frontend e API passam a viver na mesma origem, então não há CORS nem um
+// segundo processo Node para manter de pé.
+//
+// Os headers de segurança NÃO ficam aqui: `async headers()` só funciona quando
+// existe um servidor Next. Quem os envia em produção é o
+// HeadersSegurancaFilter do backend.
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: "export",
   reactStrictMode: true,
   poweredByHeader: false,
   devIndicators: false,
+  // O otimizador de imagens do Next é um serviço em runtime; na exportação
+  // estática as imagens são servidas como estão.
+  images: { unoptimized: true },
   // Libera o acesso ao servidor de dev via IP da rede local (teste em celular).
   // Produção não usa isto: não há servidor de dev nem essa checagem de origem.
   allowedDevOrigins: ["10.1.1.30"],
-  async headers() {
-    return [{ source: "/:path*", headers: HEADERS_SEGURANCA }];
-  },
 };
 
 export default nextConfig;

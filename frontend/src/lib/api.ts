@@ -58,9 +58,13 @@ export class ApiErro extends Error {
   }
 }
 
-const URL_BASE = (
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api/v1"
-).replace(/\/+$/, "");
+// Em produção o backend serve o frontend na mesma origem, então o padrão é um
+// caminho relativo. No desenvolvimento, o NEXT_PUBLIC_API_URL do .env aponta
+// para o backend em outra porta.
+const URL_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "/api/v1").replace(
+  /\/+$/,
+  "",
+);
 
 async function requisicao<T>(caminho: string, init?: RequestInit): Promise<T> {
   let resposta: Response;
@@ -98,7 +102,7 @@ async function requisicao<T>(caminho: string, init?: RequestInit): Promise<T> {
 }
 
 export async function buscarOferta(): Promise<Oferta> {
-  return requisicao<Oferta>("/oferta", { next: { revalidate: 60 } });
+  return requisicao<Oferta>("/oferta");
 }
 
 export async function criarCadastro(corpo: CadastroEntrada): Promise<Cadastro> {

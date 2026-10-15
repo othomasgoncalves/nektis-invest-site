@@ -1,0 +1,61 @@
+# Gera o pacote pronto para a Square Cloud (frontend exportado dentro do jar do
+# Spring Boot). Baixe o artefato "nektis-invest-squarecloud" na aba Actions e
+# envie o conteudo como .zip no painel da Square.
+name: Pacote Square Cloud
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build do frontend
+        working-directory: frontend
+        env:
+          # Mesma origem: o Spring Boot serve o HTML e a API no mesmo dominio.
+          NEXT_PUBLIC_API_URL: /api/v1
+          NEXT_PUBLIC_VIDEO_URL: ${{ vars.NEXT_PUBLIC_VIDEO_URL }}
+          NEXT_TELEMETRY_DISABLED: 1
+        run: |
+          npm ci
+          npm run build
+
+      - name: Copia o frontend para dentro do backend
+        run: |
+          mkdir -p backend/src/main/resources/static
+          cp -r frontend/out/. backend/src/main/resources/static/
+
+      - name: Build do backend
+        working-directory: backend
+        run: |
+          chmod +x mvnw
+          ./mvnw -B package -DskipTests
+
+      - name: Monta o pacote
+        run: |
+          mkdir -p deploy
+          cp backend/target/nektis-invest-backend-*.jar deploy/nektis-invest.jar
+          cp squarecloud.app deploy/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nektis-invest-squarecloud
+          path: deploy/
