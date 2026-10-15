@@ -35,7 +35,7 @@ public class LimiteTaxaFilter extends OncePerRequestFilter {
         this.capacidade = properties.limiteTaxa().capacidade();
         this.capacidadeLeitura = properties.limiteTaxa().capacidadeLeitura();
         this.janela = properties.limiteTaxa().janela();
-        this.confiarProxy = properties.limiteTaxa().confiarProxy();
+        this.confiarProxy = properties.confiarProxy();
     }
 
     @Override

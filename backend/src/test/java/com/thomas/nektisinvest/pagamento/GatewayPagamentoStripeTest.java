@@ -40,6 +40,7 @@ class GatewayPagamentoStripeTest {
 
     private static NektisProperties propriedades(String chaveSecreta, String idPreco) {
         return new NektisProperties(
+                false,
                 null,
                 null,
                 null,

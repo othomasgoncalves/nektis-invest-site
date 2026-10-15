@@ -52,6 +52,12 @@ logging:
     com.thomas.nektisinvest: INFO
 
 nektis:
+  # Estamos atrás de um proxy reverso de confiança que sobrescreve os headers
+  # X-Forwarded-*? Governa duas coisas que dependem da mesma premissa:
+  #   - de onde o rate limit tira o IP do cliente;
+  #   - se o ForwardedHeaderFilter reconstrói o esquema/host públicos, sem o que
+  #     o Spring não reconhece as requisições do próprio site como mesma origem.
+  confiar-proxy: ${CONFIAR_PROXY:false}
   # Origens liberadas no frame-src do CSP, para o iframe do vídeo de
   # apresentação. Ajuste se o vídeo sair do YouTube/Vimeo.
   csp-frame-src: ${CSP_FRAME_SRC:https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com}
@@ -61,7 +67,6 @@ nektis:
     capacidade: 10
     capacidade-leitura: 300
     janela: PT1M
-    confiar-proxy: ${CONFIAR_PROXY:false}
   pagamentos:
     gateway: ${GATEWAY_PAGAMENTO:stripe}
     stripe:
