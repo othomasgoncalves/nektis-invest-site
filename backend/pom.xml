@@ -52,6 +52,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
+    <!-- Autoconfiguração do RestClient.Builder, usado pelo ResendEnviadorEmail.
+         No Spring Boot 4 os autoconfigs são módulos separados e o starter-web
+         não traz este. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
