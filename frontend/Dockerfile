@@ -1,5 +1,9 @@
 # syntax=docker/dockerfile:1
 
+# O frontend é exportado como arquivos estáticos (next.config.ts: output "export").
+# Em produção quem os serve é o jar do Spring Boot; aqui, no docker-compose, um
+# nginx faz o papel para o ambiente local ficar parecido com o de produção.
+
 FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
@@ -18,23 +22,22 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
 
 RUN npm run build
 
-FROM node:24-alpine AS runtime
-WORKDIR /app
-ENV NODE_ENV=production \
-    NEXT_TELEMETRY_DISABLED=1 \
-    PORT=3000 \
-    HOSTNAME=0.0.0.0
+FROM nginx:1.29-alpine AS runtime
 
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+# O export gera um arquivo por rota (obrigado.html). O $uri.html no try_files é
+# o que liga /obrigado ao arquivo, como o PaginasEstaticasController faz no jar.
+RUN printf '%s\n' \
+    'server {' \
+    '  listen 3000;' \
+    '  root /usr/share/nginx/html;' \
+    '  location / {' \
+    '    try_files $uri $uri.html $uri/ =404;' \
+    '  }' \
+    '}' > /etc/nginx/conf.d/default.conf
 
-COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=build --chown=nextjs:nodejs /app/public ./public
+COPY --from=build /app/out /usr/share/nginx/html
 
-USER nextjs
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD node -e "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-
-CMD ["node", "server.js"]
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=5 \
+  CMD wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1

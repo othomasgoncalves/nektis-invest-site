@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Footer } from "@/components/secoes/Footer";
 import { Header } from "@/components/secoes/Header";
 import { ObrigadoClient } from "./ObrigadoClient";
@@ -8,18 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-function primeiro(valor: string | string[] | undefined): string {
-  if (Array.isArray(valor)) return valor[0] ?? "";
-  return valor ?? "";
-}
-
-export default async function ObrigadoPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-
+export default function ObrigadoPage() {
   return (
     <>
       <Header />
@@ -36,10 +26,12 @@ export default async function ObrigadoPage({
           </div>
 
           <div style={{ marginTop: 48 }}>
-            <ObrigadoClient
-              cadastroId={primeiro(params.cadastro)}
-              tokenAcesso={primeiro(params.token)}
-            />
+            {/* A página é estática: o cadastro e o token vêm da query string,
+                lida no cliente. O Suspense é o que o useSearchParams exige
+                para a casca da página poder ser pré-renderizada no build. */}
+            <Suspense fallback={null}>
+              <ObrigadoClient />
+            </Suspense>
           </div>
         </div>
       </main>

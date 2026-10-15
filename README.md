@@ -126,13 +126,17 @@ Os POSTs públicos têm rate limit por IP.
 
 ---
 
-## Stripe (perfil de produção)
+## Stripe (perfil padrão)
+
+Stripe e Resend são o padrão: eles valem sempre que `SPRING_PROFILES_ACTIVE`
+estiver **sem valor**. Não existe um perfil chamado `prod` — o único perfil é o
+`dev`, que troca os dois por um gateway falso e e-mail no log.
 
 1. No painel da Stripe, crie um **Price recorrente mensal em BRL** e copie o `price_...`.
 2. Preencha no `.env`:
 
 ```dotenv
-SPRING_PROFILES_ACTIVE=prod
+SPRING_PROFILES_ACTIVE=
 STRIPE_SECRET_KEY=sk_...
 STRIPE_PRICE_ID=price_...
 STRIPE_WEBHOOK_SECRET=whsec_...
@@ -160,15 +164,70 @@ para `/#cadastro`.
 
 ## Produção
 
-- Rode atrás de HTTPS e ajuste `URL_FRONTEND`, `URL_PUBLICA_API` e
-  `NEXT_PUBLIC_API_URL` para os domínios reais.
-- **`CONFIAR_PROXY=true` atrás de proxy reverso.** O rate limit ignora o
+### Como o pacote é montado
+
+Em produção **não existe processo Node**. O frontend é exportado como arquivos
+estáticos (`output: "export"` → `frontend/out/`) e copiado para
+`backend/src/main/resources/static/`, de onde o Spring Boot o serve. Um único
+processo atende tudo, na mesma origem:
+
+```
+invest.nektis.tech
+  └─ Spring Boot (porta 80 na Square Cloud)
+       ├─ /            → index.html
+       ├─ /obrigado    → obrigado.html  (forward do PaginasEstaticasController)
+       └─ /api/v1/**   → API
+```
+
+Mesma origem tem três consequências:
+
+- **Não há CORS.** `NEXT_PUBLIC_API_URL` é o caminho relativo `/api/v1`, fixado
+  no build pelo workflow.
+- **Os headers de segurança saem do backend.** O `async headers()` do
+  next.config.ts só funciona com servidor Next; quem os envia é o
+  `HeadersSegurancaFilter`.
+- O CSP precisa de `script-src 'unsafe-inline'`: o HTML exportado pelo Next
+  carrega os dados de hidratação em `<script>` inline e, sem servidor, não há
+  nonce por requisição.
+
+O pacote é gerado pelo workflow `.github/workflows/squarecloud.yml`, que publica
+o artefato `nektis-invest-squarecloud` (`nektis-invest.jar` + `squarecloud.app`)
+na aba **Actions**. É esse `.zip` que sobe no painel da Square Cloud.
+
+A home é estática, então o preço e o prazo vêm do `OFERTA_PADRAO`
+(`frontend/src/lib/oferta.ts`) no primeiro frame e são substituídos pela resposta
+de `GET /api/v1/oferta` na hidratação. Mantenha o fallback em dia com a linha
+seed de `oferta` na `V1__init.sql`.
+
+### Banco na Neon
+
+- Use o endpoint **direto**, não o `-pooler`: o pool é o Hikari, do lado da
+  aplicação, e o pooler da Neon é PgBouncer em modo transação, que atrita com os
+  prepared statements do driver JDBC.
+- Mantenha `?sslmode=require` na URL.
+- O compute da Neon **suspende quando fica ocioso** e derruba as conexões. O pool
+  já está ajustado para isso (`minimum-idle: 0`, `max-lifetime: 280s`,
+  `connection-timeout: 30s`), então a primeira requisição depois de uma pausa
+  pode levar alguns segundos enquanto o compute acorda.
+- A string de conexão **nunca** chega ao navegador: só o backend lê
+  `SPRING_DATASOURCE_*`, e nenhuma variável `NEXT_PUBLIC_*` toca no banco.
+  Diferente do Supabase, a Neon não expõe uma API HTTP sobre as tabelas nem uma
+  chave pública de cliente — não há superfície equivalente a RLS para errar.
+- O Flyway cria o schema e insere a oferta inicial na primeira subida.
+
+### Variáveis
+
+- Ajuste `URL_FRONTEND` e `URL_PUBLICA_API` para o domínio real (o mesmo nos dois).
+- **`CONFIAR_PROXY=true` na Square Cloud.** O rate limit ignora o
   `X-Forwarded-For` por padrão, porque o header é forjável e permitiria burlar o
-  limite. Com um proxy na frente e `false`, todas as requisições parecem vir do
-  IP do proxy e o limite de 10/min passa a valer para o site inteiro. O proxy
-  precisa **sobrescrever** o `X-Forwarded-For`, não apenas acrescentar.
-- `NEXT_PUBLIC_*` entra no bundle **em tempo de build** — o `docker-compose.yml`
-  já passa essas variáveis como build args do frontend.
+  limite. Atrás do proxy da Square com `false`, todas as requisições parecem vir
+  do IP do proxy e o limite de 10/min passa a valer para o site inteiro.
+- `NEXT_PUBLIC_*` entra no bundle **em tempo de build**: mudar `NEXT_PUBLIC_VIDEO_URL`
+  no painel da Square não tem efeito. Defina a variável de repositório no GitHub
+  e refaça o build.
+- Sem `RESEND_API_KEY` a aplicação **não sobe** no perfil padrão.
+- Sem `STRIPE_WEBHOOK_SECRET` todo webhook é **rejeitado com 400** e nenhuma
+  assinatura é ativada — o cliente paga e fica preso em "confirmando".
 - Segredos só por variável de ambiente; nada de chave versionada.
 - O remetente de `EMAIL_REMETENTE` precisa estar em um domínio já verificado na Resend.
 

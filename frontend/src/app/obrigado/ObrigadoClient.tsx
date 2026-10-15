@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { CardEtapa } from "@/components/fluxo/CardEtapa";
 import { PainelAcesso } from "@/components/fluxo/PainelAcesso";
@@ -25,13 +26,11 @@ const semAssinatura = () => () => undefined;
 const montadoNoCliente = () => true;
 const montadoNoServidor = () => false;
 
-export function ObrigadoClient({
-  cadastroId,
-  tokenAcesso,
-}: {
-  cadastroId: string;
-  tokenAcesso: string;
-}) {
+export function ObrigadoClient() {
+  const parametros = useSearchParams();
+  const cadastroId = parametros.get("cadastro") ?? "";
+  const tokenAcesso = parametros.get("token") ?? "";
+
   const [fase, setFase] = useState<Fase>("consultando");
   const [links, setLinks] = useState<LinkAcesso[]>([]);
 
