@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "nektis")
 public record NektisProperties(
+        boolean confiarProxy,
         String cspFrameSrc,
         String urlFrontend,
         String urlPublica,
@@ -13,8 +14,7 @@ public record NektisProperties(
         Email email,
         LinksAcesso linksAcesso) {
 
-    public record LimiteTaxa(
-            int capacidade, int capacidadeLeitura, Duration janela, boolean confiarProxy) {}
+    public record LimiteTaxa(int capacidade, int capacidadeLeitura, Duration janela) {}
 
     public record Pagamentos(String gateway, Stripe stripe) {
         public record Stripe(String chaveSecreta, String idPreco, String segredoWebhook) {}

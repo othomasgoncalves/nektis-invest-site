@@ -6,13 +6,13 @@ spring:
     enabled: true
 
 nektis:
+  confiar-proxy: false
   url-frontend: http://localhost:3000
   url-publica: http://localhost:8080
   limite-taxa:
     capacidade: 100000
     capacidade-leitura: 100000
     janela: PT1M
-    confiar-proxy: false
   pagamentos:
     gateway: falso
   email:

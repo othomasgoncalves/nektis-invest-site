@@ -217,11 +217,20 @@ seed de `oferta` na `V1__init.sql`.
 
 ### Variáveis
 
-- Ajuste `URL_FRONTEND` e `URL_PUBLICA_API` para o domínio real (o mesmo nos dois).
-- **`CONFIAR_PROXY=true` na Square Cloud.** O rate limit ignora o
-  `X-Forwarded-For` por padrão, porque o header é forjável e permitiria burlar o
-  limite. Atrás do proxy da Square com `false`, todas as requisições parecem vir
-  do IP do proxy e o limite de 10/min passa a valer para o site inteiro.
+- **`URL_FRONTEND` é o domínio que o visitante usa, sem barra final** — não o
+  subdomínio interno da hospedagem. Ele é a origem liberada no CORS *e* a base do
+  `success_url` da Stripe. Apontado para o lugar errado, o cadastro falha com
+  `403 Invalid CORS request` e quem paga é devolvido para o domínio errado.
+  `URL_PUBLICA_API` recebe o mesmo valor.
+- **`CONFIAR_PROXY=true` na Square Cloud.** O flag diz que há um proxy de
+  confiança sobrescrevendo os `X-Forwarded-*`, e governa duas coisas:
+  - o rate limit passa a tirar o IP do cliente do `X-Forwarded-For`. Com `false`
+    atrás de proxy, todas as requisições parecem vir do IP do proxy e o limite de
+    10/min passa a valer para o site inteiro.
+  - o `ForwardedHeaderFilter` reconstrói o esquema e o host públicos. Sem isso o
+    Tomcat enxerga `http://` atrás do TLS do proxy, e o `CorsUtils.isCorsRequest`
+    — que compara esquema, host e porta com o `Origin` — passa a tratar o site
+    falando com a própria API como requisição entre origens.
 - `NEXT_PUBLIC_*` entra no bundle **em tempo de build**: mudar `NEXT_PUBLIC_VIDEO_URL`
   no painel da Square não tem efeito. Defina a variável de repositório no GitHub
   e refaça o build.

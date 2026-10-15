@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 class PaginasEstaticasTest {
 
     private static final NektisProperties PROPRIEDADES = new NektisProperties(
-            "https://www.youtube-nocookie.com", null, null, null, null, null, null);
+            false, "https://www.youtube-nocookie.com", null, null, null, null, null, null);
 
     private final MockMvc mockMvc = MockMvcBuilders
             .standaloneSetup(new PaginasEstaticasController())

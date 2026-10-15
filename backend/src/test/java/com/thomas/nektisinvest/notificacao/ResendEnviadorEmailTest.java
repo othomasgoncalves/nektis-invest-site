@@ -44,6 +44,7 @@ class ResendEnviadorEmailTest {
 
     private static NektisProperties propriedades(String chaveResend) {
         return new NektisProperties(
+                false,
                 null,
                 null,
                 null,
