@@ -3,8 +3,7 @@ import joaoPedro from "@/../public/imagens/joao-pedro.webp";
 
 const METRICAS = [
   { valor: "6", rotulo: "anos de mercado" },
-  { valor: "Fundos", rotulo: "de investimento" },
-  { valor: "Forex", rotulo: "câmbio internacional" },
+  { valor: "Diária", rotulo: "frequência do conteúdo" },
 ];
 
 export function JoaoPedro() {
@@ -47,7 +46,7 @@ export function JoaoPedro() {
 
         <div>
           <p className="nk-eyebrow">Quem conduz</p>
-          <h2 style={{ marginTop: 18 }}>João Pedro</h2>
+          <h2 style={{ marginTop: 18 }}>João Pedro Siqueira</h2>
 
           <p
             style={{
@@ -57,19 +56,9 @@ export function JoaoPedro() {
               color: "rgba(62,28,89,.75)",
             }}
           >
-            Há 6 anos trabalha com fundos de investimento e Forex. É ele quem
-            acompanha o mercado e escreve, todos os dias, o conteúdo do grupo.
-          </p>
-          <p
-            style={{
-              marginTop: 18,
-              fontSize: 17,
-              lineHeight: 1.6,
-              color: "rgba(62,28,89,.75)",
-            }}
-          >
-            A proposta é simples: traduzir o que acontece no mercado em decisões
-            claras, com critério e visão de longo prazo.
+            Conduz a Nektis Invest com foco em análise de mercado, educação
+            financeira e comunicação estruturada sobre investimentos. São 6
+            anos de atuação no mercado financeiro.
           </p>
 
           <dl

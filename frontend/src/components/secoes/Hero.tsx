@@ -24,9 +24,9 @@ export function Hero() {
           }}
         >
           <h1>
-            Onde deixar o seu dinheiro{" "}
+            Capital exige análise.{" "}
             <span style={{ color: "var(--color-accent)" }}>
-              seguro e rentável.
+              Estratégia exige método.
             </span>
           </h1>
 
@@ -39,14 +39,14 @@ export function Hero() {
               color: "rgba(62,28,89,.75)",
             }}
           >
-            Um grupo fechado no WhatsApp com a leitura diária do mercado feita
-            por João Pedro: a notícia resumida e a ação a aplicar, sem promessa
-            de dinheiro fácil.
+            A Nektis Invest oferece análises de mercado, indicadores econômicos
+            e estratégias de investimento, com foco em informação estruturada,
+            clareza analítica e decisões financeiras mais conscientes.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <a href="#cadastro" className="nk-btn nk-btn-lg nk-btn-primary">
-              Entrar no grupo
+              Assinar e acessar
             </a>
             <a href="#video" className="nk-btn nk-btn-lg nk-btn-ghost">
               <span
@@ -109,7 +109,7 @@ export function Hero() {
                   color: "rgba(62,28,89,.6)",
                 }}
               >
-                em fundos de investimento e Forex
+                de atuação no mercado financeiro
               </p>
             </div>
 
@@ -174,10 +174,19 @@ export function Hero() {
                   className="nk-eyebrow"
                   style={{ fontSize: 11, marginTop: 14 }}
                 >
-                  Ação a aplicar
+                  Contexto
                 </p>
                 <p style={{ marginTop: 6, fontSize: 14, lineHeight: 1.5 }}>
-                  Manter renda fixa pós-fixada. Evitar alavancagem hoje.
+                  O que a decisão sinaliza para prazos, risco e diversificação.
+                </p>
+                <p
+                  style={{
+                    marginTop: 12,
+                    fontSize: 11,
+                    color: "rgba(62,28,89,.5)",
+                  }}
+                >
+                  Exemplo ilustrativo.
                 </p>
               </div>
             </div>

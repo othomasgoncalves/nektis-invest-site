@@ -43,7 +43,7 @@ export function Header() {
         </nav>
 
         <a href="#assinatura" className="nk-btn nk-btn-header nk-btn-primary shrink-0">
-          Garantir minha vaga
+          Ver assinatura
         </a>
       </div>
     </header>

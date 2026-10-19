@@ -42,9 +42,9 @@ export function Video() {
           }}
         >
           <div>
-            <p className="nk-eyebrow">Apresentação</p>
+            <p className="nk-eyebrow">Sobre a Nektis Invest</p>
             <h2 style={{ marginTop: 18 }}>
-              Dinheiro fácil não existe. Estratégia, sim.
+              Conhecimento financeiro com método e transparência.
             </h2>
           </div>
           <p
@@ -55,8 +55,9 @@ export function Video() {
               maxWidth: 460,
             }}
           >
-            João Pedro explica o que é o grupo, como funciona a rotina diária e
-            por que desconfiar de quem promete retorno garantido.
+            Organizamos conteúdos e contextualizamos acontecimentos econômicos
+            para uma compreensão mais consciente dos investimentos,
+            reconhecendo que toda decisão financeira envolve risco.
           </p>
         </div>
 

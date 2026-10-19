@@ -4,19 +4,29 @@ import { useId, useState } from "react";
 
 const PERGUNTAS = [
   {
-    pergunta: "O grupo promete retorno garantido?",
+    pergunta: "A Nektis Invest garante rentabilidade?",
     resposta:
-      "Não. O conteúdo é informativo e educacional. Investimentos envolvem riscos e nenhuma estratégia garante rentabilidade.",
+      "Não. Investimentos envolvem riscos, oscilações e possibilidade de perdas. Nenhum resultado futuro pode ser garantido.",
+  },
+  {
+    pergunta: "Posso investir apenas com os conteúdos do site?",
+    resposta:
+      "Eles são material de estudo e não substituem a avaliação da sua situação financeira, dos seus objetivos e da sua tolerância a risco.",
+  },
+  {
+    pergunta: "A Nektis Invest identifica meu perfil de investidor?",
+    resposta:
+      "Sim. No cadastro, você poderá responder a um questionário sobre objetivos financeiros, experiência com investimentos, horizonte de tempo e tolerância a riscos. As respostas ajudam a compreender o seu perfil de investidor.",
   },
   {
     pergunta: "Como recebo o link do WhatsApp?",
     resposta:
-      "Assim que o pagamento é confirmado, os links dos dois canais aparecem na tela e também são enviados para o seu e-mail.",
+      "Assim que o pagamento é confirmado, os links aparecem na tela e vão também para o seu e-mail.",
   },
   {
-    pergunta: "Como funciona a cobrança?",
+    pergunta: "Como funciona a assinatura?",
     resposta:
-      "É uma assinatura mensal recorrente no cartão. Você pode cancelar quando quiser e o acesso vale até o fim do período pago.",
+      "Cobrança mensal recorrente no cartão, com acesso aos materiais da oferta vigente. Cancele quando quiser: o acesso vale até o fim do período pago.",
   },
   {
     pergunta: "Até quando posso entrar?",
