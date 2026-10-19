@@ -12,14 +12,13 @@ const ETAPAS = [
   {
     numero: "03",
     titulo: "Acesso",
-    descricao:
-      "O link dos canais no WhatsApp é liberado na hora, na tela e por e-mail.",
+    descricao: "Links dos canais liberados na hora, na tela e por e-mail.",
   },
   {
     numero: "04",
     titulo: "Rotina diária",
     descricao:
-      "Todo dia, a notícia resumida e a ação a aplicar, direto do João Pedro.",
+      "Todo dia, o resumo do que movimentou o mercado e o contexto por trás.",
   },
 ];
 
@@ -34,6 +33,20 @@ export function ComoFunciona() {
         <h2 style={{ marginTop: 18, maxWidth: 560 }}>
           Da inscrição ao primeiro resumo em poucos minutos.
         </h2>
+
+        <p
+          style={{
+            marginTop: 22,
+            maxWidth: 620,
+            fontSize: 17,
+            lineHeight: 1.6,
+            color: "rgba(62,28,89,.7)",
+          }}
+        >
+          O seu dinheiro continua com você. A Nektis Invest não movimenta, não
+          custodia e não acessa recursos de ninguém: informamos e damos
+          contexto. A decisão é sempre sua.
+        </p>
 
         <ol
           className="mt-14 grid list-none p-0"

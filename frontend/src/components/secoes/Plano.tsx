@@ -2,7 +2,7 @@ import type { Oferta } from "@/lib/api";
 import { formatarPrazo, formatarValor } from "@/lib/formato";
 
 const INCLUIDO = [
-  "Canal de notícias diárias com resumo e ação a aplicar",
+  "Notícias diárias com resumo e contexto do mercado",
   "Canal de networking com os membros",
   "Conteúdo produzido por João Pedro",
   "Vídeo de apresentação e fundamentos",
@@ -48,7 +48,7 @@ export function Plano({ oferta }: { oferta: Oferta }) {
         <div className="text-center">
           <p className="nk-eyebrow">Assinatura</p>
           <h2 style={{ marginTop: 18, maxWidth: 620, marginInline: "auto" }}>
-            Um plano. Acesso completo aos dois canais.
+            Assinatura de conteúdo. Acesso aos dois canais.
           </h2>
         </div>
 
@@ -70,7 +70,12 @@ export function Plano({ oferta }: { oferta: Oferta }) {
             }}
           >
             <div className="flex items-center justify-between gap-4">
-              <p style={{ fontSize: 17, fontWeight: 700 }}>Nektis Invest</p>
+              <div>
+                <p className="nk-eyebrow">Nektis Invest</p>
+                <p style={{ marginTop: 6, fontSize: 17, fontWeight: 700 }}>
+                  Assinatura de Conteúdo
+                </p>
+              </div>
               <span
                 style={{
                   borderRadius: "var(--radius-pill)",
@@ -113,7 +118,8 @@ export function Plano({ oferta }: { oferta: Oferta }) {
                 color: "rgba(62,28,89,.6)",
               }}
             >
-              Cobrança recorrente no cartão.
+              Acesso aos conteúdos do plano contratado. Cobrança recorrente no
+              cartão, cancelável a qualquer momento.
             </p>
 
             <a

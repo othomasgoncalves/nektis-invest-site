@@ -3,13 +3,13 @@ const MENSAGENS = [
     tema: "Renda fixa",
     quando: "Hoje",
     resumo: "Juros futuros sobem após ata do banco central.",
-    acao: "manter posição pós-fixada, sem alavancagem.",
+    contexto: "o que a curva de juros sinaliza sobre prazos e risco.",
   },
   {
     tema: "Câmbio",
     quando: "Ontem",
     resumo: "Dólar recua com fluxo estrangeiro positivo.",
-    acao: "aguardar antes de novas compras em moeda forte.",
+    contexto: "como o fluxo externo costuma influenciar a moeda.",
   },
 ];
 
@@ -61,8 +61,21 @@ export function Comunidade() {
       <div className="nk-shell">
         <p className="nk-eyebrow">A comunidade</p>
         <h2 style={{ marginTop: 18, maxWidth: 680 }}>
-          Dois canais no WhatsApp, cada um com uma função.
+          Uma comunidade para quem leva o mercado a sério.
         </h2>
+        <p
+          style={{
+            marginTop: 20,
+            maxWidth: 680,
+            fontSize: 17,
+            lineHeight: 1.6,
+            color: "rgba(62,28,89,.7)",
+          }}
+        >
+          Conteúdos educacionais, troca de perspectivas e discussão responsável
+          sobre o mercado financeiro. São dois canais no WhatsApp, cada um com
+          uma função.
+        </p>
 
         <div
           className="mt-14 grid"
@@ -100,8 +113,8 @@ export function Comunidade() {
                 color: "rgba(255,255,255,.75)",
               }}
             >
-              Todos os dias, João Pedro resume o que movimentou o mercado e diz
-              qual ação aplicar. Leitura de dois minutos.
+              Todos os dias, o resumo do que movimentou o mercado e o contexto
+              por trás dos números. Leitura de dois minutos.
             </p>
 
             <div className="mt-8 flex flex-col gap-4">
@@ -144,9 +157,9 @@ export function Comunidade() {
                     }}
                   >
                     <strong style={{ color: "var(--color-accent)" }}>
-                      Ação:
+                      Contexto:
                     </strong>{" "}
-                    {mensagem.acao}
+                    {mensagem.contexto}
                   </p>
                 </div>
               ))}
@@ -190,8 +203,8 @@ export function Comunidade() {
                 color: "rgba(62,28,89,.7)",
               }}
             >
-              Um espaço para os membros trocarem experiências, oportunidades e
-              contatos com pessoas que pensam o dinheiro a longo prazo.
+              Espaço para trocar experiências, oportunidades e contatos com
+              quem pensa o dinheiro a longo prazo.
             </p>
 
             <div className="mt-8 flex flex-col gap-4">

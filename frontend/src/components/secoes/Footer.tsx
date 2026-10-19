@@ -34,9 +34,11 @@ export function Footer() {
             color: "rgba(255,255,255,.55)",
           }}
         >
-          O conteúdo da Nektis Invest tem caráter informativo e educacional.
-          Investimentos envolvem riscos, incluindo perda do capital.
-          Rentabilidade passada não é garantia de rentabilidade futura.
+          Conteúdo informativo e educacional. Investimentos envolvem riscos,
+          incluindo a perda do capital investido. Rentabilidades passadas não
+          garantem resultados futuros. A adequação de cada investimento depende
+          dos objetivos e das circunstâncias do investidor. Serviços sujeitos a
+          autorização ou registro observarão os requisitos legais aplicáveis.
         </p>
       </div>
     </footer>

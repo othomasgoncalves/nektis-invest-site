@@ -4,9 +4,9 @@ import "./globals.css";
 
 const URL_SITE = "https://invest.nektis.tech";
 
-const TITULO = "Nektis Invest — Onde deixar o seu dinheiro seguro e rentável.";
+const TITULO = "Nektis Invest — Capital exige análise. Estratégia exige método.";
 const DESCRICAO =
-  "Um grupo fechado no WhatsApp com a leitura diária do mercado feita por João Pedro: a notícia resumida e a ação a aplicar, sem promessa de dinheiro fácil.";
+  "Análises de mercado, indicadores econômicos e estratégias de investimento, com foco em informação estruturada e decisões financeiras mais conscientes.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(URL_SITE),
